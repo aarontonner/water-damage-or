@@ -1,40 +1,38 @@
 ---
-preloadCSS: "/assets/css/blog.css"
-eleventyComputed:
-  title: "{{ title }}"
-  description: "{{ description }}"
-  preloadImg: "{{ image }}"
-  permalink: "/blog/{{ title | slug }}/index.html"
+title: "Articles from The Water Damage Pro's of Oregon"
+description: "Learn about the water damage services we offer for your city!"
+preloadImg: "/assets/images/cabinets2.jpg"
+permalink: "blog/"
+eleventyNavigation:
+  key: Blog
+  order: 500
 ---
 
 {% extends "layouts/base.html" %} {% block head %}
 <link rel="stylesheet" href="/assets/css/blog.css" />
+<link rel="stylesheet" href="/assets/css/components.css" />
 <link rel="stylesheet" href="/assets/css/services.css" />
 {% endblock %} {% block body %}
 <!-- ============================================ -->
 <!--                    LANDING                   -->
 <!-- ============================================ -->
 
-{#
 <section id="int-hero">
+  <h1 id="home-h">Water Damage Blogs</h1>
   <picture>
-    <source
-      media="(max-width: 600px)"
-      srcset="/assets/images/cabinets2-m.jpg"
-    />
-    <source media="(min-width: 601px)" srcset="/assets/images/cabinets2.jpg" />
+    <source media="(max-width: 600px)" srcset="/assets/images/banner.jpg" />
+    <source media="(min-width: 601px)" srcset="/assets/images/banner.jpg" />
     <img
       aria-hidden="true"
       decoding="async"
-      src="/assets/images/cabinets2.jpg"
-      alt="kitchen cabinets"
+      src="/assets/images/banner.jpg"
+      alt="water damage blogs"
       loading="eager"
       width="2500"
       height="1667"
     />
   </picture>
 </section>
-#}
 
 <!-- ============================================ -->
 <!--              Main Blog Content               -->
@@ -44,13 +42,25 @@ eleventyComputed:
   <!--Main content -->
   <div class="main-content">
     <!-- ============================================ -->
-    <!--                  Blog Article                -->
+    <!--                 Blog Articles                -->
     <!-- ============================================ -->
 
-    <article class="blog-article">
+    {% if collections.post | length == 0 %}
+    <h1>No Recent locations</h1>
+    {% else %} {%- for post in collections.post | reverse -%}
+    <article class="recent-articles">
+      <!--Main Article Image-->
+      <picture class="blog-mainImage">
+        <img
+          src="{{ post.data.image }}"
+          alt=""
+          width="795"
+          height="400"
+          decoding="async"
+        />
+      </picture>
       <!--Article Info-->
       <div class="article-group">
-        <h1 class="blog-h1">{{ title }}</h1>
         <div class="blog-authorGroup">
           <!--Author Image-->
           <picture class="blog-author-img">
@@ -62,26 +72,18 @@ eleventyComputed:
               decoding="async"
             />
           </picture>
-          <span class="blog-author">{{ author }}</span>
+          <span class="blog-author">{{ post.data.author }}</span>
           <span aria-hidden="true" class="blog-dot"></span>
           <!--Blog Date-->
-          <span class="blog-date">{{ date | postDate }}</span>
+          {#
+          <span class="blog-date">{{ location.date | locationDate }}</span> #}
         </div>
+        <h2 class="blog-h1">{{ post.data.title }}</h2>
+        <a href="{{ post.url }}" class="blog-link">Continue Reading</a>
       </div>
-      <!--Main Article Image-->
-      <picture class="blog-mainImage">
-        <img
-          src="{{ image }}"
-          alt="{{ imageAlt }}"
-          width="795"
-          height="400"
-          decoding="async"
-        />
-      </picture>
-      <section id="blog-content">{{ content | safe }}</section>
     </article>
+    {%- endfor -%} {% endif %}
   </div>
-  <!-- End .main-content -->
 
   {% include 'components/featured-post.html' %}
 </div>
